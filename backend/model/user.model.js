@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { OAuthUserSchema } from "./oauth-user.model.js";
 
 const userModelSchema = new mongoose.Schema({
     display_name: {
@@ -15,7 +16,6 @@ const userModelSchema = new mongoose.Schema({
     },
     password_hash: {
         type: String,
-        required: true,
     },
     receive_newsletter: {
         type: Boolean,
@@ -46,6 +46,10 @@ const userModelSchema = new mongoose.Schema({
         enum: ["Freelance", "Admin", "client"],
         default: "Freelance",
     },
+    binded_accounts: {
+        type: [String],
+        default: [],
+    }
 }, {
     timestamps: true
 })

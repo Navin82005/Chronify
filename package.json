@@ -11,6 +11,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "axios": "^1.7.7",
     "bcrypt": "^5.1.1",
     "chronify": "file:",
     "connect-mongo": "^5.1.0",
@@ -20,6 +21,7 @@
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
     "install": "^0.13.0",
+    "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.7.1",
     "nodemon": "^3.1.7",
     "npm": "^10.9.0",

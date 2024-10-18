@@ -14,8 +14,7 @@ const GoogleAccountModel = new mongoose.Schema(
         }
     }, {
     timestamps: true
-}
-)
+})
 
 const GoogleUser = mongoose.model("GoogleUser", GoogleAccountModel)
 export default GoogleUser;
