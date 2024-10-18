@@ -1,0 +1,6 @@
+
+node_modules
+package-lock.json
+frontend\README.md
+.env
+client_config.js
