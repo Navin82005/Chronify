@@ -1,0 +1,42 @@
+@import url('https://fonts.googleapis.com/css?family=Nunito+Sans');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans|Nova+Mono');
+
+
+.back-to-home-link {
+    text-transform: uppercase;
+    font-size: 1.5rem;
+    color: #FFFFFF;
+    margin-top: 3rem;
+    text-decoration: underline;
+}
+.back-to-home-link svg {
+    text-decoration: underline;
+
+}
+
+.error-container h1 {
+    font-family: "Nova Mono";
+    font-size: 4rem;
+    text-transform: uppercase;
+    margin: 0;
+}
+
+.error-container p {
+    text-transform: uppercase;
+    letter-spacing: 0.2rem;
+    font-size: 2rem;
+    margin: 1.5rem 0 3rem;
+    margin-bottom: 0;
+}
+
+.error-container {
+    background-color: #222;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+    font-family: "Open Sans";
+    color: #FFFFFF;
+    font-size: 1em;
+}

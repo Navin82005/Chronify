@@ -1,5 +1,5 @@
 import { client_config, frontend } from "../../client_config.js";
-import { configureDefaultUser, findAndUpdateGoogleUser, getGoogleOAuthTokens, getGoogleUserInfo } from "../services/auth.service.js";
+import { configureDefaultUser, findAndUpdateGoogleUser, getGoogleOAuthTokens, getGoogleUserInfo, getJWTTokens } from "../services/auth.service.js";
 import jwt from "jsonwebtoken";
 
 export const googleOAuthURL = () => {
@@ -18,7 +18,7 @@ export const googleOAuthURL = () => {
     return `${rootURL}?${queryString.toString()}`;
 }
 
-export const setGoogleSession = async (res, code) => {
+export const setSessionTokens = async (res, code) => {
     try {
         // GETTING TOKENS FROM THE GOOGLE API
         const { id_token, access_token } = await getGoogleOAuthTokens(code);
@@ -34,15 +34,15 @@ export const setGoogleSession = async (res, code) => {
         );
         // Updating User Collection
         const newUser = await configureDefaultUser(rawUserData, newAuthUser);
-        console.log(newUser);
-        console.log(newAuthUser);
+        // console.log(newUser);
+        // console.log(newAuthUser);
 
-        // console.log(googleUser);
+        const tokens = getJWTTokens(newUser);
+
+        return { tokens: tokens, user: newUser };
     }
     catch (error) {
         console.log(error.message);
-        return res.redirect(`${frontend.origin}/auth/google/error`);
+        return res.redirect(`${frontend.origin}/access/error`);
     }
-    // await getGoogleOAuthTokens(code);
-    // console.log({ id_token, access_token });
 }

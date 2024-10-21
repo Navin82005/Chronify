@@ -1,12 +1,10 @@
 import axios from "axios";
 import qs from "qs";
+import jwt from "jsonwebtoken";
 
-import GoogleUser from "../model/google-user.model.js";
-
-import { client_config } from "../../client_config.js";
+import { client_config, meta_data } from "../../client_config.js";
 import User from "../model/user.model.js";
 import OAuthUser from "../model/oauth-user.model.js";
-
 
 export const getGoogleOAuthTokens = async (code) => {
     const url = client_config.Google.token_uri;
@@ -57,22 +55,50 @@ export const findAndUpdateGoogleUser = async (query, data, options) => {
     return await OAuthUser.findOneAndUpdate(query, data, options);
 }
 
-
-
-
-
 export const configureDefaultUser = async (rawData, authUser) => {
-    const newUser = new User({
-        display_name: rawData.name,
-        email: rawData.email,
-        profile: rawData.picture,
-        binded_accounts: [authUser._id],
-    });
+    const findUser = await User.findOne({ email: authUser.userId });
+    if (!findUser) {
+        const newUser = new User({
+            display_name: rawData.name,
+            email: rawData.email,
+            profile: rawData.picture,
+            binded_accounts: [authUser._id],
+        });
 
+        try {
+            const newSavedUser = await newUser.save();
+            return newSavedUser;
+        } catch (error) {
+            console.log("Error saving new Common User", error.message);
+        }
+    }
+    return findUser;
+}
+
+export const getJWTTokens = (user) => {
+    const payload = {
+        userId: user.email,
+        username: user.display_name
+    };
+
+    return jwt.sign(
+        payload,
+        meta_data.jwt_secret,
+        { expiresIn: '180d' }
+    );
+}
+
+export const verifyJWTToken = (access_token) => {
+    console.log(access_token);
+    
+    if (access_token == undefined) {
+        return { status: false, user: null };
+    }
     try {
-        const newSavedUser = await newUser.save();
-        return newSavedUser;
+        const data = jwt.verify(access_token, meta_data.jwt_secret);
+        return { status: true, user: data };
     } catch (error) {
-        console.log("Error Creating Common User", error.message);
+        console.log("Error in verifying access token: " + error.message);
+        return { status: false, user: null };
     }
 }
