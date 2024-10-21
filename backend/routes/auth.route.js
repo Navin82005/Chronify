@@ -22,7 +22,7 @@ authRoute.get("/google/session", async (req, res) => {
             }
         );
 
-        return res.redirect(`${frontend.origin}/profile`);
+        return res.redirect(`${frontend.origin}/`);
     } catch (error) {
         console.log("Error in setting cookie or generating tokens: " + error.message);
         try {

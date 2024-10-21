@@ -8,6 +8,8 @@ import Error401 from './Error/LoginError/Error401';
 import Sidebar, { SidebarItem } from './Sidebar/Sidebar';
 import { FolderKanban, LayoutGrid, UserRound } from 'lucide-react';
 import { getProfileData } from '../components/profile.controller.mjs';
+import axios from 'axios';
+import Dashboard from './Dashboard/Dashboard';
 
 const Layout = () => {
     const location = useLocation();
@@ -19,7 +21,7 @@ const Layout = () => {
 
     useEffect(() => {
         async function loadUserData(userData) {
-            if (!hidePolicy.includes(location.pathname))
+            if (!hidePolicy.includes(location.pathname)) {
                 try {
                     const body = await getProfileData();
                     console.log(body);
@@ -29,6 +31,7 @@ const Layout = () => {
                 } catch (err) {
                     console.log("Error loading user data: " + err.message);
                 }
+            }
         }
 
         loadUserData();
@@ -39,7 +42,7 @@ const Layout = () => {
         <div className="flex h-screen w-screen">
             {/* Sidebar */}
             {!hideSidebarPaths.includes(location.pathname) && <Sidebar className="w-64 bg-gray-800 text-white">
-                <SidebarItem active={true} alert={true} icon={<LayoutGrid />} text={"Dashboard"} to="/dashboard" />
+                <SidebarItem active={true} alert={true} icon={<LayoutGrid />} text={"Dashboard"} to="/" />
                 <SidebarItem active={false} alert={false} icon={<FolderKanban />} text={"Projects"} to="/projects" />
                 <SidebarItem active={false} alert={false} icon={<UserRound />} text={"Profile"} to="/profile" />
             </Sidebar>}
@@ -47,6 +50,7 @@ const Layout = () => {
             {/* Content Area */}
             <div className="flex-1 bg-gray-100">
                 <Routes>
+                    <Route path='/' Component={Dashboard} />
                     <Route path='/login' Component={Login} />
                     <Route path='/auth/google' Component={Login} />
                     <Route path='/profile' Component={Profile} />

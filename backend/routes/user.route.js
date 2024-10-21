@@ -33,7 +33,6 @@ userRoutes.get('/', async (req, res) => {
         return res.status(401).json({ error: true, message: "Unauthorized" });
     }
     
-
     const token_data = verifyJWTToken(access_token);
     if (token_data.status) {
         try {

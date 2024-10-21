@@ -1,5 +1,5 @@
-import React from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { MoreVertical, ChevronLast, ChevronFirst } from "lucide-react";
 import { useContext, createContext, useState } from "react";
@@ -11,6 +11,12 @@ const SidebarContext = createContext();
 
 export function Sidebar({ children }) {
     const [expanded, setExpanded] = useState(false);
+    const [user, setUser] = useState(null);
+
+    useEffect(() => {
+        const user = localStorage.getItem("user");
+        setUser(JSON.parse(user));
+    }, []);
 
     return (
         <aside className="h-screen w-fit">
@@ -41,18 +47,29 @@ export function Sidebar({ children }) {
                 </SidebarContext.Provider>
 
                 <div className="border-t flex p-3">
-                    <img
-                        src="https://ui-avatars.com/api/?background=c7d2fe&color=3730a3&bold=true"
-                        alt=""
-                        className="w-10 h-10 rounded-md"
-                    />
+                    {(user && !user.profile &&
+                        <img
+                            src={`https://ui-avatars.com/api/?name=${user.display_name}&background=c7d2fe&color=3730a3&bold=true`}
+                            alt=""
+                            className="w-10 h-10 rounded-md"
+                        />)}
+                    {(user && user.profile &&
+                        <img
+                            src={user.profile}
+                            alt=""
+                            className="w-10 h-10 rounded-md"
+                        />)}
                     <div
                         className={`flex justify-between items-center overflow-hidden transition-all ${expanded ? "w-36 ml-3" : "w-0"
                             }`}
                     >
                         <div className="leading-4">
-                            <h4 className="font-semibold">John Doe</h4>
-                            <span className="text-xs text-gray-600">johndoe@gmail.com</span>
+                            {user &&
+                                <h4 className="font-semibold">{user.display_name}</h4>
+                            }
+                            {user &&
+                                <span className="text-xs text-gray-600">{user.email}</span>
+                            }
                         </div>
                         <MoreVertical size={20} />
                     </div>

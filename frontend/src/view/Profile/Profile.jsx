@@ -18,7 +18,6 @@ const Profile = () => {
         async function loadUserData(userData) {
             try {
                 const body = await getProfileData();
-                console.log(body.data);
                 if (body.error) {
                     navigator("/login");
                 }

@@ -1,20 +1,42 @@
-import React from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 import axios from 'axios';
 
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 
 import { react_config } from '../../config';
 import chronify_icon from "../../assets/chronify-icon-sm.png";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDiscord } from '@fortawesome/free-brands-svg-icons';
+import { getProfileData } from '../../components/profile.controller.mjs';
+import CircleLoader from '../Loaders/CircleLoader/CircleLoader';
 
 axios.defaults.withCredentials = true;
 
 const Login = () => {
-    console.log(`react_config: ${react_config.backend_url}/auth/google`);
+    const navigator = useNavigate();
+    const [loading, setLoading] = useState(true);
 
-    return (
+    useEffect(() => {
+        async function loadUserData(userData) {
+            setLoading(true);
+            try {
+                const body = await getProfileData();
+                if (!body.error) {
+                    navigator("/", { replace: true });
+                }
+            } catch (err) {
+                console.log("Error loading user data: " + err.message);
+            }
+            setLoading(false);
+        }
+
+        loadUserData();
+    }, []);
+
+
+    return <Fragment>{
+        !loading &&
         <div className='h-full h-screen w-screen'>
             <div className='flex justify-between px-5 py-5'>
                 <Link to={"/"} className='block w-fit h-fit'>
@@ -46,7 +68,10 @@ const Login = () => {
                 </div>
             </div>
         </div>
-    )
+    }
+        {loading && <CircleLoader />}
+    </Fragment>
+
 }
 
 export default Login;
